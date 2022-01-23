@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Param, ParseIntPipe } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import { CreateMeasurementDto } from './dto/createMeasurement.dto';
+import { UpdateMeasurementDto } from './dto/updateMeasurement.dto';
 
 @Injectable()
 export class MeasurementsService {
 
   constructor(private prisma: PrismaService) {}
 
-  create(todo: Prisma.MeasurementCreateInput) {
+  create(measurement: CreateMeasurementDto) {
     return this.prisma.measurement.create({
-      data: todo,
+      data: measurement,
     });
   }
 
@@ -17,7 +19,8 @@ export class MeasurementsService {
     return this.prisma.measurement.findMany();
   }
 
-  findOne(id: number) {
+  findOne(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE })) 
+  id: number) {
     return this.prisma.measurement.findUnique({
       where: {
         id,
@@ -25,12 +28,12 @@ export class MeasurementsService {
     });
   }
 
-  update(id: number, todo: Prisma.MeasurementUpdateInput) {
+  update(id: number, measurement: UpdateMeasurementDto) {
     return this.prisma.measurement.update({
       where: {
         id,
       },
-      data: todo,
+      data: measurement,
     });
   }
 

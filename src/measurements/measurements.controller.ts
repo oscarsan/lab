@@ -1,15 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes } from '@nestjs/common';
 import { MeasurementsService } from './measurements.service';
-
+import { CreateMeasurementDto } from './dto/createMeasurement.dto';
+import { UpdateMeasurementDto } from './dto/updateMeasurement.dto';
+import { MeasurementCustomValidationPipe } from './measurementCustomValidation';
 
 @Controller('measurements')
 export class MeasurementsController {
   constructor(private readonly measurementsService: MeasurementsService) {}
 
   @Post()
-  create(@Body() measurement: Prisma.MeasurementCreateInput) {
-    return this.measurementsService.create(measurement);
+  @UsePipes(new MeasurementCustomValidationPipe())
+  create(@Body() createMeasurementDto: CreateMeasurementDto) {
+    return this.measurementsService.create(createMeasurementDto);
   }
 
   @Get()
@@ -23,8 +25,8 @@ export class MeasurementsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() measurement: Prisma.MeasurementUpdateInput) {
-    return this.measurementsService.update(+id, measurement);
+  update(@Param('id') id: string, @Body() updateMeasurementDto: UpdateMeasurementDto) {
+    return this.measurementsService.update(+id, updateMeasurementDto);
   }
 
   @Delete(':id')
