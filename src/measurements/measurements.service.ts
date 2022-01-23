@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMeasurementDto } from './dto/create-measurement.dto';
-import { UpdateMeasurementDto } from './dto/update-measurement.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class MeasurementsService {
-  create(createMeasurementDto: CreateMeasurementDto) {
-    return 'This action adds a new measurement';
+
+  constructor(private prisma: PrismaService) {}
+
+  create(todo: Prisma.MeasurementCreateInput) {
+    return this.prisma.measurement.create({
+      data: todo,
+    });
   }
 
   findAll() {
-    return `This action returns all measurements`;
+    return this.prisma.measurement.findMany();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} measurement`;
+    return this.prisma.measurement.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  update(id: number, updateMeasurementDto: UpdateMeasurementDto) {
-    return `This action updates a #${id} measurement`;
+  update(id: number, todo: Prisma.MeasurementUpdateInput) {
+    return this.prisma.measurement.update({
+      where: {
+        id,
+      },
+      data: todo,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} measurement`;
+    return this.prisma.measurement.delete({
+      where: {
+        id,
+      },
+    });
   }
 }
