@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable, Param, ParseIntPipe } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CreateMeasurementDto } from './dto/createMeasurement.dto';
 import { UpdateMeasurementDto } from './dto/updateMeasurement.dto';

@@ -1,18 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MeasurementsService } from './measurements.service';
+import { prisma, PrismaClient } from "@prisma/client";
+import { prismaMock } from '../prisma/singleton'
 
-describe('MeasurementsService', () => {
-  let service: MeasurementsService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [MeasurementsService],
-    }).compile();
 
-    service = module.get<MeasurementsService>(MeasurementsService);
-  });
+test('should create new measurement ', async () => {
+  const measurementDto = {
+    id: 1,
+    name: 'Rich',
+    unit: 'hello@prisma.io',
+    upper_limit: "131",
+    lower_limit: "122",
+    created
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-});
+  }
+
+  prismaMock.measurement.create.mockResolvedValue(measurementDto)
+
+  await expect(create(user)).resolves.toEqual({
+    id: 1,
+    name: 'Rich',
+    email: 'hello@prisma.io',
+  })
+})
